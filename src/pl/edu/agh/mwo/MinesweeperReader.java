@@ -10,24 +10,24 @@ public class MinesweeperReader {
     protected int rowNumber;
     protected int colNumber;
 
-    public MinesweeperBoard read(String textBoard, int width, int height ) {
+    public MinesweeperBoard read(String textBoard, int width, int height) {
         textBoard = textBoard.replaceAll("\\s", "");
         char[][] board = new char[height][width];
 
-        if(textBoard.length() != height*width) {
+        if (textBoard.length() != height * width) {
             throw new IllegalArgumentException(
-                    String.format("Board does not have the same length %d x %d",
-                            textBoard.length(), height*width));
+                    String.format("The board size does not match %d x %d",
+                            textBoard.length(), height * width));
         }
 
         assert textBoard.length() == width * height;
         for (int x = 0; x < height; x++) {
             for (int y = 0; y < width; y++) {
-                char c = textBoard.charAt(x*width + y);
-                if(c != '*' && c != '.'){
-                    throw new IllegalArgumentException("Given board has invalid character:" + c);
+                char c = textBoard.charAt(x * width + y);
+                if (c != '*' && c != '.') {
+                    throw new IllegalArgumentException("The board contains an invalid character: " + c);
                 }
-                board[x][y] = textBoard.charAt(x*width + y);
+                board[x][y] = textBoard.charAt(x * width + y);
             }
         }
         return new MinesweeperBoard(board);
@@ -41,101 +41,96 @@ public class MinesweeperReader {
         return this.colNumber = colNumber;
     }
 
-    protected String getCurrentText(){
+    protected String getCurrentText() {
         return this.currentText;
     }
 
-    private boolean isTextContainsForbiddenCharacters1(String newRowText){
+    private boolean isTextContainsForbiddenCharacters1(String newRowText) {
 
-        for(int i = 0; i < newRowText.length(); i++){
+        for (int i = 0; i < newRowText.length(); i++) {
             char c = newRowText.charAt(i);
-            if(c != '*' && c != '.'){
-                throw new IllegalArgumentException("[v14] Wprowdzony tekst może zawierać tylko \"*\" lub \".\".\n"
-                        + "> wprowadzony tekst: " + newRowText);
+            if (c != '*' && c != '.') {
+                throw new IllegalArgumentException("[v14] The entered text can only contain \"*\" or \".\".\n"
+                        + "> entered text: " + newRowText);
             }
         }
         return true;
     }
 
+    public String createTextBlock1(String newRowText) throws Exception {
 
-    public String createTextBlock1(String newRowText) throws Exception{
-
-                if (newRowText.length() == colNumber) {
-                    isTextContainsForbiddenCharacters1(newRowText);
-                    currentText = currentText + "\n" + newRowText;
-                }
-                else {
-                    throw new IllegalArgumentException (String.format("[v17] Wprowdzony tekst ma błędną długość.\n"
-                            + "> wprowadzony tekst: " + newRowText + ""));
-                }
+        if (newRowText.length() == colNumber) {
+            isTextContainsForbiddenCharacters1(newRowText);
+            currentText = currentText + "\n" + newRowText;
+        } else {
+            throw new IllegalArgumentException(String.format("[v17] The entered text has an invalid length.\n"
+                    + "> entered text: " + newRowText + ""));
+        }
 
         return currentText;
     }
 
-    private List<String> defaultRowText(){
+    private List<String> defaultRowText() {
         List<String> currentText = new ArrayList<>();
 
-        for(int i = 0; i< colNumber; i++){
+        for (int i = 0; i < colNumber; i++) {
             currentText.add(".");
         }
         return currentText;
     }
 
-    private boolean isTextContainsForbiddenCharacters2(String newRowText){
+    private boolean isTextContainsForbiddenCharacters2(String newRowText) {
 
-        for(int i = 0; i < newRowText.length(); i++){
+        for (int i = 0; i < newRowText.length(); i++) {
             char c = newRowText.charAt(i);
-            if(!Character.isDigit(newRowText.charAt(i)) && c != ' '){
-                throw new IllegalArgumentException("[v11] Wprowdzony tekst może zawierać tylko liczby.\n"
-                        + "> wprowadzony tekst: " + newRowText);
+            if (!Character.isDigit(newRowText.charAt(i)) && c != ' ') {
+                throw new IllegalArgumentException("[v11] The entered text can only contain numbers.\n"
+                        + "> entered text: " + newRowText);
             }
         }
         return true;
     }
 
-    protected String createTextBlock2(String newRowText) throws Exception{
+    protected String createTextBlock2(String newRowText) throws Exception {
 
         isTextContainsForbiddenCharacters2(newRowText);
         List<String> symbolsList = defaultRowText();
         String previousSymbol = "";
 
-        for(int i = 0; i < newRowText.length(); i++){
+        for (int i = 0; i < newRowText.length(); i++) {
             char c = newRowText.charAt(i);
             String s13 = Character.toString(c);
 
-            if(Character.isDigit(c)){
-                if(previousSymbol.equals("")){// wytestowąć isEmpty()
+            if (Character.isDigit(c)) {
+                if (previousSymbol.equals("")) {
 
                     int number = Integer.parseInt(s13);
-                    if(number != 0){
+                    if (number != 0) {
                         previousSymbol = Character.toString(c);
+                    } else {
+                        textToPrint = previousSymbol + Character.toString(c);
+                        throw new IllegalArgumentException("[v9] A number cannot start with zero.\n"
+                                + "> error: " + textToPrint + "\n"
+                                + "> entered text: " + newRowText);
                     }
-                    else {
-                        textToPrint = previousSymbol + Character.toString(c);;
-                        throw new IllegalArgumentException("[v9] Cyfra niemoże zaczynać się od zera.\n"
-                                + "> błąd: " +  textToPrint + "\n"
-                                + "> wprowadzony tekst: " + newRowText);
-                    }
-                }
-                else {
-                   previousSymbol += Character.toString(c);
+                } else {
+                    previousSymbol += Character.toString(c);
                 }
             }
 
-            if(Character.isWhitespace(c) || i == newRowText.length() - 1){
+            if (Character.isWhitespace(c) || i == newRowText.length() - 1) {
 
-                if(!previousSymbol.equals("")){
+                if (!previousSymbol.equals("")) {
                     String s2 = previousSymbol;
-                    int index = Integer.parseInt(s2) - 1; // 00013 = 13
+                    int index = Integer.parseInt(s2) - 1;
 
-                    if(index >= 0 && index < colNumber){
+                    if (index >= 0 && index < colNumber) {
                         symbolsList.set(index, "*");
-                    }
-                    else{
-                        textToPrint = previousSymbol + Character.toString(c);;
-                        throw new IllegalArgumentException("[v10] Jeden z podanych nr kolumn jest większy niż szerokość wiersza(" + colNumber+ ").\n"
-                                + "> błąd: " +  textToPrint + "\n"
-                                + "> wprowadzony tekst: " + newRowText);
+                    } else {
+                        textToPrint = previousSymbol + Character.toString(c);
+                        throw new IllegalArgumentException("[v10] One of the given column numbers is larger than the row width (" + colNumber + ").\n"
+                                + "> error: " + textToPrint + "\n"
+                                + "> entered text: " + newRowText);
                     }
 
                     previousSymbol = "";
@@ -143,14 +138,13 @@ public class MinesweeperReader {
             }
         }
 
-        for(int i = 0; i < colNumber; i++){
+        for (int i = 0; i < colNumber; i++) {
             String c = symbolsList.get(i);
             currentText += c;
         }
 
         return currentText;
     }
-
 
     private boolean isTextContainsForbiddenCharacters3(String newRowText) {
 
@@ -159,56 +153,52 @@ public class MinesweeperReader {
             String s13 = Character.toString(c);
 
             if (!Character.isDigit(newRowText.charAt(i)) && c != ' ' && !s13.equals("-")) {
-                throw new IllegalArgumentException("[v12] Wprowdzony tekst może zawierać tylko liczby i znak \"-\".\n"
-                        + "> wprowadzony tekst: " + newRowText);
+                throw new IllegalArgumentException("[v12] The entered text can only contain numbers and the \"-\" sign.\n"
+                        + "> entered text: " + newRowText);
             }
         }
         return true;
     }
 
-    protected String createTextBlock3( String newRowText) throws Exception{
+    protected String createTextBlock3(String newRowText) throws Exception {
 
         isTextContainsForbiddenCharacters3(newRowText);
         List<String> symbolsList = defaultRowText();
 
         String previousSymbol = "";
 
-        for(int i = 0; i < newRowText.length(); i++){
+        for (int i = 0; i < newRowText.length(); i++) {
             char c = newRowText.charAt(i);
             String s13 = Character.toString(c);
 
-            if(Character.isDigit(c)){
-                if(previousSymbol.equals("")){// wytestowąć isEmpty()
+            if (Character.isDigit(c)) {
+                if (previousSymbol.equals("")) {
 
                     int number = Integer.parseInt(s13);
-                    if(number != 0){
+                    if (number != 0) {
                         previousSymbol = Character.toString(c);
+                    } else {
+                        textToPrint = previousSymbol + Character.toString(c);
+                        throw new IllegalArgumentException("[v2] A number cannot start with zero.\n"
+                                + "> error: " + textToPrint + "\n"
+                                + "> entered text: " + newRowText);
                     }
-                    else {
-                        textToPrint = previousSymbol + Character.toString(c);;
-                        throw new IllegalArgumentException("[v2] Cyfra niemoże zaczynać się od zera.\n"
-                                + "> błąd: " +  textToPrint + "\n"
-                                + "> wprowadzony tekst: " + newRowText);
-                    }
-                }
-                else {
+                } else {
 
-                    if(previousSymbol.lastIndexOf("-") == previousSymbol.length()-1 || Character.isDigit(c)){ // || chr ??
+                    if (previousSymbol.lastIndexOf("-") == previousSymbol.length() - 1 || Character.isDigit(c)) {
 
                         int number = Integer.parseInt(s13);
-                        if(number != 0){
+                        if (number != 0) {
                             previousSymbol += Character.toString(c);
-                        }
-                        else{
+                        } else {
 
-                            if(previousSymbol.lastIndexOf("-") == previousSymbol.length()-1 ){
+                            if (previousSymbol.lastIndexOf("-") == previousSymbol.length() - 1) {
 
-                                textToPrint = previousSymbol + Character.toString(c);;
-                                throw new IllegalArgumentException("[v1] Cyfra niemoże zaczynać się od zera.\n"
-                                        + "> błąd: " +  textToPrint + "\n"
-                                + "> wprowadzony tekst: " + newRowText);
-                            }
-                            else{
+                                textToPrint = previousSymbol + Character.toString(c);
+                                throw new IllegalArgumentException("[v1] A number cannot start with zero.\n"
+                                        + "> error: " + textToPrint + "\n"
+                                        + "> entered text: " + newRowText);
+                            } else {
                                 previousSymbol += Character.toString(c);
                             }
                         }
@@ -216,86 +206,78 @@ public class MinesweeperReader {
                 }
             }
 
-            if(s13.equals("-")){
+            if (s13.equals("-")) {
 
-                 if(previousSymbol.contains("-")){
-                     textToPrint = previousSymbol + Character.toString(c);;
-                     throw new IllegalArgumentException("[v3] Przed znakiem \"-\" został już dodany znak \"-\". Błędna konfiguracja przedziału.\n"
-                             + "> błąd: " +  textToPrint + "\n"
-                             + "> wprowadzony tekst: " + newRowText);
-                 }
-                 else {
-                     if(previousSymbol.equals("")){
-                         textToPrint = previousSymbol + Character.toString(c);;
-                         throw new IllegalArgumentException("[v4] Przed znakiem \"-\" nie ma cyfry. Błędna konfiguracja przedziału.\n"
-                                 + "> błąd: " +  textToPrint + "\n"
-                                 + "> wprowadzony tekst: " + newRowText);
-                     }
-                     else{
-                         if(previousSymbol.lastIndexOf("-") ==  previousSymbol.length()-1){
-                             textToPrint = previousSymbol + Character.toString(c);;
-                             throw new IllegalArgumentException("[v5] Za znakiem \"-\" nie ma cyfry. Błędna konfiguracja przedziału.\n"
-                                     + "> błąd: " +  textToPrint + "\n"
-                                     + "> wprowadzony tekst: " + newRowText);
-                         }
-                         else {
-                             previousSymbol += Character.toString(c);
-                         }
-                     }
-                 }
+                if (previousSymbol.contains("-")) {
+                    textToPrint = previousSymbol + Character.toString(c);
+                    throw new IllegalArgumentException("[v3] A \"-\" sign was already added before. Invalid range configuration.\n"
+                            + "> error: " + textToPrint + "\n"
+                            + "> entered text: " + newRowText);
+                } else {
+                    if (previousSymbol.equals("")) {
+                        textToPrint = previousSymbol + Character.toString(c);
+                        throw new IllegalArgumentException("[v4] There is no number before the \"-\" sign. Invalid range configuration.\n"
+                                + "> error: " + textToPrint + "\n"
+                                + "> entered text: " + newRowText);
+                    } else {
+                        if (previousSymbol.lastIndexOf("-") == previousSymbol.length() - 1) {
+                            textToPrint = previousSymbol + Character.toString(c);
+                            throw new IllegalArgumentException("[v5] There is no number after the \"-\" sign. Invalid range configuration.\n"
+                                    + "> error: " + textToPrint + "\n"
+                                    + "> entered text: " + newRowText);
+                        } else {
+                            previousSymbol += Character.toString(c);
+                        }
+                    }
+                }
             }
 
-            if(Character.isWhitespace(c) || i == newRowText.length() - 1){
+            if (Character.isWhitespace(c) || i == newRowText.length() - 1) {
 
-                if(!previousSymbol.equals("")){
+                if (!previousSymbol.equals("")) {
 
-                    if(previousSymbol.lastIndexOf("-") ==  previousSymbol.length()-1){
-                            textToPrint = previousSymbol;// + Character.toString(c);;
-                            throw new IllegalArgumentException("[v6] Za znakiem \"-\" nie ma cyfry. ???????.\n"
-                                    + "> błąd: " +  textToPrint + "\n"
-                                    + "> wprowadzony tekst: " + newRowText);
-                    }
-                    else {
+                    if (previousSymbol.lastIndexOf("-") == previousSymbol.length() - 1) {
+                        textToPrint = previousSymbol;
+                        throw new IllegalArgumentException("[v6] There is no number after the \"-\" sign.\n"
+                                + "> error: " + textToPrint + "\n"
+                                + "> entered text: " + newRowText);
+                    } else {
                         String s2 = previousSymbol;
 
-                        if(!s2.contains("-")){
-                            int index = Integer.parseInt(s2) - 1; // 00013 = 13
-                            if(index >= 0 && index < colNumber){
+                        if (!s2.contains("-")) {
+                            int index = Integer.parseInt(s2) - 1;
+                            if (index >= 0 && index < colNumber) {
                                 symbolsList.set(index, "*");
+                            } else {
+                                textToPrint = previousSymbol + Character.toString(c);
+                                throw new IllegalArgumentException("[v7] One of the column numbers is larger than the row width (" + colNumber + ").\n"
+                                        + "> error: " + textToPrint + "\n"
+                                        + "> entered text: " + newRowText);
                             }
-                            else{
-                                textToPrint = previousSymbol + Character.toString(c);;
-                                throw new IllegalArgumentException("[v7] Jeden z podanych nr kolumn jest większy niż szerokość wiersza (" + colNumber+ ").\n"
-                                        + "> błąd: " +  textToPrint + "\n"
-                                        + "> wprowadzony tekst: " + newRowText);
-                            }
-                        }
-                        else {
+                        } else {
                             int cutIndex = previousSymbol.indexOf("-");
                             int startIndex = Integer.parseInt(previousSymbol.substring(0, cutIndex)) - 1;
                             int endIndex = Integer.parseInt(previousSymbol.substring(cutIndex + 1, previousSymbol.length())) - 1;
 
-                            if(startIndex <= endIndex){
-                                if(endIndex >= 0 && endIndex < colNumber){
-                                    if(startIndex >= 0 && startIndex < colNumber){
+                            if (startIndex <= endIndex) {
+                                if (endIndex >= 0 && endIndex < colNumber) {
+                                    if (startIndex >= 0 && startIndex < colNumber) {
 
-                                        for(int z = startIndex - 0; z<= endIndex; z++){
+                                        for (int z = startIndex; z <= endIndex; z++) {
                                             symbolsList.set(z, "*");
                                         }
-                                    }
-                                    else{
-                                        textToPrint = previousSymbol + Character.toString(c);;
-                                        throw new IllegalArgumentException("[v2] Początkowa wartość przedziału jest większa niż szerokość tablicy (" + colNumber+ ").\n"
-                                                + "> błąd: " +  textToPrint + "\n"
-                                                + "> wprowadzony tekst: " + newRowText);
+                                    } else {
+                                        textToPrint = previousSymbol + Character.toString(c);
+                                        throw new IllegalArgumentException("[v2] The starting value of the range is larger than the board width (" + colNumber + ").\n"
+                                                + "> error: " + textToPrint + "\n"
+                                                + "> entered text: " + newRowText);
                                     }
                                 }
-                            }
-                            else {
-                                textToPrint = previousSymbol + Character.toString(c);;
-                                throw new IllegalArgumentException("[v8] Pierwszy nr przedziału (" + startIndex + ") jest większy niż drugi (" + endIndex+ ").\n"
-                                        + "> błąd: " +  textToPrint + "\n"
-                                        + "> wprowadzony tekst: " + newRowText);
+                            } else {
+                                textToPrint = previousSymbol + Character.toString(c);
+                                throw new IllegalArgumentException("[v8] The first number in the range (" + startIndex + ") is larger than the second (" + endIndex + ").\n"
+                                        + "> error: " + textToPrint + "\n"
+                                        + "> entered text: " + newRowText);
                             }
                         }
                     }
@@ -305,7 +287,7 @@ public class MinesweeperReader {
             }
         }
 
-        for(int i = 0; i < colNumber; i++){
+        for (int i = 0; i < colNumber; i++) {
             String c = symbolsList.get(i);
             currentText += c;
         }
@@ -313,15 +295,12 @@ public class MinesweeperReader {
         return currentText;
     }
 
-    protected int changeToNumber(String numberText){
-        try{
-            int number = Integer.valueOf(numberText) ;
-        }
-        catch(NumberFormatException e){
-            throw new IllegalArgumentException("[v13] Wprowadzony tekst \"" + numberText + "\" nie jest liczbą lub zawiera niedozwolone znaki.");
+    protected int changeToNumber(String numberText) {
+        try {
+            int number = Integer.valueOf(numberText);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[v13] The entered text \"" + numberText + "\" is not a valid number or contains invalid characters.");
         }
         return Integer.parseInt(numberText);
     }
-
-
 }
