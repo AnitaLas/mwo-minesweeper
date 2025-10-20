@@ -70,7 +70,7 @@ public class MinesweeperApp {
                 } else if (width > 5 && width <= 20) {
                     System.out.println("The row length is greater than 20. Choose a board filling mode:\n" +
                             "> Rabbit Mode - press 1 - manually fill the board\n" +
-                            "> Sloth Mode - press 2 - fill the board with \"*\" symbols based on entered column numbers");
+                            "> Turtle Mode - press 2 - fill the board with \"*\" symbols based on entered column numbers");
 
                     str = br.readLine();
                     int mode = reader.changeToNumber(str);
