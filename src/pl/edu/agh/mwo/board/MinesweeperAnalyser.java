@@ -1,4 +1,4 @@
-package pl.edu.agh.mwo;
+package pl.edu.agh.mwo.board;
 
 public class MinesweeperAnalyser {
 
@@ -13,7 +13,6 @@ public class MinesweeperAnalyser {
                         if(row >= 0 && row < mines.length){
                             for(int col=j-1; col<=j+1; col++){
                                 if(col >= 0 && col < mines[row].length){
-
                                     if(mines[row][col] == '*'){
                                         value++;
                                     }
@@ -25,10 +24,5 @@ public class MinesweeperAnalyser {
                 }
             }
         }
-
-
-
-
-
     }
 }

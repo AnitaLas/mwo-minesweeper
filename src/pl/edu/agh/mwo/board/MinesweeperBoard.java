@@ -1,6 +1,4 @@
-package pl.edu.agh.mwo;
-
-import java.util.Arrays;
+package pl.edu.agh.mwo.board;
 
 public class MinesweeperBoard {
 
@@ -23,7 +21,6 @@ public class MinesweeperBoard {
             }
             result.append("\n");
         }
-        //return Arrays.deepToString(this.mines);
         return result.toString();
     }
 }
