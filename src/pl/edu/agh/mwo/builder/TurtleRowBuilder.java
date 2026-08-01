@@ -1,5 +1,7 @@
 package pl.edu.agh.mwo.builder;
 
+import pl.edu.agh.mwo.messages.Messages;
+
 public class TurtleRowBuilder implements RowBuilder {
 
     @Override
@@ -16,9 +18,7 @@ public class TurtleRowBuilder implements RowBuilder {
     }
 
     private void validateInput(String input) {
-        if (input == null || input.isBlank()) {
-            throw new IllegalArgumentException("Column list cannot be empty");
-        }
+        if (input == null || input.isBlank()) throw new IllegalArgumentException(Messages.COLUMN_LIST_EMPTY);
     }
 
     private char[] createEmptyRow(int width) {
@@ -29,13 +29,11 @@ public class TurtleRowBuilder implements RowBuilder {
         try {
             return Integer.parseInt(column) - 1;
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid column number: " + column);
+            throw new IllegalArgumentException(Messages.INVALID_COLUMN_NUMBER + column);
         }
     }
 
     private void validateColumn(int index, int width, String column) {
-        if (index < 0 || index >= width) {
-            throw new IllegalArgumentException("Column outside board: " + column);
-        }
+        if (index < 0 || index >= width) throw new IllegalArgumentException(Messages.COLUMN_OUTSIDE_BOARD + column);
     }
 }

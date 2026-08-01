@@ -1,8 +1,10 @@
 package pl.edu.agh.mwo.console;
 
+import pl.edu.agh.mwo.board.BoardTextBuilder;
 import pl.edu.agh.mwo.board.MinesweeperAnalyser;
 import pl.edu.agh.mwo.board.MinesweeperBoard;
 import pl.edu.agh.mwo.board.MinesweeperBoardReader;
+import pl.edu.agh.mwo.board.NumberParser;
 import pl.edu.agh.mwo.builder.MinesweeperBoardBuilder;
 import pl.edu.agh.mwo.messages.Messages;
 
@@ -13,8 +15,8 @@ import java.io.InputStreamReader;
 public class MinesweeperConsole {
 
     private final BufferedReader br;
-
     private final MinesweeperAnalyser analyser;
+    private final NumberParser numberParser;
 
     public MinesweeperConsole() {
         this(new BufferedReader(new InputStreamReader(System.in)));
@@ -23,6 +25,7 @@ public class MinesweeperConsole {
     public MinesweeperConsole(BufferedReader br) {
         this.br = br;
         this.analyser = new MinesweeperAnalyser();
+        this.numberParser = new NumberParser();
     }
 
     public void start() {
@@ -33,37 +36,38 @@ public class MinesweeperConsole {
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             } catch (IOException e) {
-                System.out.println("Input error: " + e.getMessage());
+                System.out.println(Messages.INPUT_ERROR + e.getMessage());
             }
             printSeparator();
             System.out.println(Messages.NEW_GAME_MESSAGE);
             try {
                 input = br.readLine();
             } catch (IOException e) {
-                System.out.println("Input error.");
+                System.out.println(Messages.INPUT_ERROR_SHORT);
                 input = "end";
             }
         } while (!input.equals("end"));
-        System.out.println("See you next time!");
+        System.out.println(Messages.GOODBYE_MESSAGE);
     }
 
     private void playGame() throws IOException {
         MinesweeperBoardReader reader = new MinesweeperBoardReader();
+        BoardTextBuilder textBuilder = new BoardTextBuilder();
         printSeparator();
         System.out.println(Messages.START_MESSAGE);
-        int height = readNumber(reader, Messages.ENTER_ROWS);
-        int width = readNumber(reader, Messages.ENTER_COLUMNS);
+        int height = readNumber(Messages.ENTER_ROWS);
+        int width = readNumber(Messages.ENTER_COLUMNS);
         MinesweeperBoardBuilder builder = new MinesweeperBoardBuilder(br);
-        builder.fillBoard(reader, height, width);
-        MinesweeperBoard board = reader.read(reader.getCurrentText(), width, height);
+        builder.fillBoard(textBuilder, height, width);
+        MinesweeperBoard board = reader.read(textBuilder.getCurrentText(), width, height);
         printBoard(board);
         analyser.fillIn(board);
         printBoard(board);
     }
 
-    private int readNumber(MinesweeperBoardReader reader, String message) throws IOException {
+    private int readNumber(String message) throws IOException {
         System.out.println(message);
-        return reader.changeToNumber(br.readLine());
+        return numberParser.parse(br.readLine());
     }
 
     private void printBoard(MinesweeperBoard board) {

@@ -1,5 +1,7 @@
 package pl.edu.agh.mwo.builder;
 
+import pl.edu.agh.mwo.messages.Messages;
+
 public class SlothRowBuilder implements RowBuilder {
 
     @Override
@@ -8,19 +10,14 @@ public class SlothRowBuilder implements RowBuilder {
         char[] row = createEmptyRow(width);
         String[] values = input.trim().split("\\s+");
         for (String value : values) {
-            if (value.contains("-")) {
-                createRange(row, value, width);
-            } else {
-                createColumn(row, value, width);
-            }
+            if (value.contains("-")) createRange(row, value, width);
+            else createColumn(row, value, width);
         }
         return new String(row);
     }
 
     private void validateInput(String input) {
-        if (input == null || input.isBlank()) {
-            throw new IllegalArgumentException("Column list cannot be empty");
-        }
+        if (input == null || input.isBlank()) throw new IllegalArgumentException(Messages.COLUMN_LIST_EMPTY);
     }
 
     private char[] createEmptyRow(int width) {
@@ -29,9 +26,7 @@ public class SlothRowBuilder implements RowBuilder {
 
     private void createRange(char[] row, String value, int width) {
         String[] range = value.split("-");
-        if (range.length != 2) {
-            throw new IllegalArgumentException("Invalid range: " + value);
-        }
+        if (range.length != 2) throw new IllegalArgumentException(Messages.INVALID_RANGE + value);
         int start = parseNumber(range[0], value) - 1;
         int end = parseNumber(range[1], value) - 1;
         validateRange(start, end, width, value);
@@ -42,9 +37,7 @@ public class SlothRowBuilder implements RowBuilder {
 
     private void createColumn(char[] row, String value, int width) {
         int index = parseNumber(value, value) - 1;
-        if (index < 0 || index >= width) {
-            throw new IllegalArgumentException("Column outside board: " + value);
-        }
+        if (index < 0 || index >= width) throw new IllegalArgumentException(Messages.COLUMN_OUTSIDE_BOARD + value);
         row[index] = '*';
     }
 
@@ -52,16 +45,12 @@ public class SlothRowBuilder implements RowBuilder {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number in input: " + originalInput);
+            throw new IllegalArgumentException(Messages.INVALID_NUMBER_IN_INPUT + originalInput);
         }
     }
 
     private void validateRange(int start, int end, int width, String value) {
-        if (start < 0 || end >= width) {
-            throw new IllegalArgumentException("Range outside board: " + value);
-        }
-        if (start > end) {
-            throw new IllegalArgumentException("Invalid range: start is greater than end");
-        }
+        if (start < 0 || end >= width) throw new IllegalArgumentException(Messages.RANGE_OUTSIDE_BOARD + value);
+        if (start > end) throw new IllegalArgumentException(Messages.RANGE_START_GREATER_THAN_END);
     }
 }
