@@ -1,9 +1,8 @@
 # 💣 Minesweeper – Game Board Creation 💣
 
-## 🎯 Description
-
 This module handles **creating and filling the Minesweeper game board**.
 It allows the player or program to initialize a board of any size and populate it with mines using **one of three methods**, depending on the chosen mode.
+
 **Digits represent the number of mines in the neighboring cells**, while `*` denotes a mine and `0` denotes a cell with no neighboring mines.
 
 ---
@@ -15,7 +14,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 **Example – width 5:**
 
-```
+```text
 12*21
 *33*2
 2*33*
@@ -32,7 +31,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 **Example – width 10, different columns per row:**
 
-```
+```text
 222***2**2
 **45*533*2
 3**4**2332
@@ -42,7 +41,7 @@ It allows the player or program to initialize a board of any size and populate i
 1213*42111
 13*5**22*1
 *5*6*6*211
-*4*4**2100
+*4*4*2100
 ```
 
 ---
@@ -54,7 +53,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 **Example – width 35, different ranges per row:**
 
-```
+```text
 0002*32********100000012***11110000
 0002*4*5*****5443333334*65311*10000
 23344*35**5433************311111110
@@ -73,3 +72,9 @@ It allows the player or program to initialize a board of any size and populate i
 | 🐇 Rabbit Mode | Player fills the board manually     | Any width         |
 | 🐢 Turtle Mode | Automatic filling by column numbers | Width > 5 && ≤ 20 |
 | 🦥 Sloth Mode  | Automatic filling by columns/ranges | Width > 20        |
+
+---
+
+### Technologies
+
+* Java 🍵
