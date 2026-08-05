@@ -7,7 +7,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 ---
 
-### 🐇 Rabbit Mode
+## 🐇 Rabbit Mode
 
 * The player **fills the board manually** with mines.
 * Each mine (`*`) is placed in the positions selected by the player.
@@ -24,7 +24,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 ---
 
-### 🐢 Turtle Mode
+## 🐢 Turtle Mode
 
 * The program **automatically fills the board** with mines (`*`) based on **specified column numbers**.
 * Columns may differ **between rows**.
@@ -46,7 +46,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 ---
 
-### 🦥 Sloth Mode
+## 🦥 Sloth Mode
 
 * The most flexible automatic filling method.
 * Allows specifying **individual columns or entire column ranges**, which can differ **between rows**.
@@ -65,7 +65,7 @@ It allows the player or program to initialize a board of any size and populate i
 
 ---
 
-### 📝 Availability Guide
+## 📝 Availability Guide
 
 | Mode           | Filling Method                      | Available Width   |
 | -------------- | ----------------------------------- | ----------------- |
@@ -75,6 +75,6 @@ It allows the player or program to initialize a board of any size and populate i
 
 ---
 
-### Technologies
+## Technologies
 
 * Java 🍵
