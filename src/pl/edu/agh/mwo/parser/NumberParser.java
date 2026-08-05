@@ -1,4 +1,4 @@
-package pl.edu.agh.mwo.board;
+package pl.edu.agh.mwo.parser;
 
 import pl.edu.agh.mwo.messages.Messages;
 

@@ -2,7 +2,7 @@ package pl.edu.agh.mwo.builder;
 
 import pl.edu.agh.mwo.board.BoardSize;
 import pl.edu.agh.mwo.board.BoardTextBuilder;
-import pl.edu.agh.mwo.board.NumberParser;
+import pl.edu.agh.mwo.parser.NumberParser;
 import pl.edu.agh.mwo.messages.Messages;
 
 import java.io.BufferedReader;

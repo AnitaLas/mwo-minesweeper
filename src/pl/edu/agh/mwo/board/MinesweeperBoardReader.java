@@ -1,5 +1,7 @@
 package pl.edu.agh.mwo.board;
 
+import pl.edu.agh.mwo.parser.BoardParser;
+
 public class MinesweeperBoardReader {
 
     private final BoardParser parser;

@@ -1,4 +1,4 @@
-package pl.edu.agh.mwo.board;
+package pl.edu.agh.mwo.validation;
 
 import pl.edu.agh.mwo.messages.Messages;
 

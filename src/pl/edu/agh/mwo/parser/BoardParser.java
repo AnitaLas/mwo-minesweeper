@@ -1,4 +1,7 @@
-package pl.edu.agh.mwo.board;
+package pl.edu.agh.mwo.parser;
+
+import pl.edu.agh.mwo.validation.BoardValidator;
+import pl.edu.agh.mwo.board.MinesweeperBoard;
 
 public class BoardParser {
 

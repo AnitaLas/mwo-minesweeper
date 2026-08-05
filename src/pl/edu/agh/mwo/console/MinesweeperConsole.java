@@ -4,7 +4,7 @@ import pl.edu.agh.mwo.board.BoardTextBuilder;
 import pl.edu.agh.mwo.board.MinesweeperAnalyser;
 import pl.edu.agh.mwo.board.MinesweeperBoard;
 import pl.edu.agh.mwo.board.MinesweeperBoardReader;
-import pl.edu.agh.mwo.board.NumberParser;
+import pl.edu.agh.mwo.parser.NumberParser;
 import pl.edu.agh.mwo.builder.MinesweeperBoardBuilder;
 import pl.edu.agh.mwo.messages.Messages;
 
